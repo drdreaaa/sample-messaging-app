@@ -1,46 +1,70 @@
 import { Request, Response, Router } from "express";
+import jwt from 'jsonwebtoken';
 import authService from "../services/authService";
 
 const authRouter = Router();
 
+// login
 authRouter.post('/api/login', async (req: Request, res: Response) => {
     console.log(`what does the request look like: `)
     console.log(`req.body: ${JSON.stringify(req.body)}`);
-    const response = await authService.login(req.body.username, req.body.password);
+    const { email, password } = req.body;
+    const response = await authService.login(email, password);
     console.log(`[authRouter] response from service: ${JSON.stringify(response)}`);
 
     if (response) {
-        // creds: 'asdf' and 'asdf'
-        // should be { token: 'test123' };
         res.send(response);
     } else {
         res.send(null)
     }
-    // res.send({
-    //     token: 'test123'
-    // })
 });
 
-// authRouter.get('/api/login', (req: Request, res: Response) => {
-//     console.log(`what does the request look like: `)
-//     console.log(`req.body: ${JSON.stringify(req.body)}`)
-//     res.send({
-//         token: 'test123'
-//     })
-// });
+// logout
+authRouter.post('/api/logout', async (req: Request, res: Response) => {
+    const { userId } = req.body;
+    const response = authService.logout(userId);
+    res.send(response);
+});
 
+authRouter.post('/api/register', async (req: Request, res: Response) => {
+    const { email, password } = req.body;
+    const response = await authService.register(email, password);
+    console.log(`[authRouter] response from service] ${JSON.stringify(response)}`);
+    if (response) {
+        res.send(response);
+    } else {
+        res.send(null);
+    }
+});
 
-/* 
-userRouter.post('/auth/login2', async (req: Request, res: Response) => {
+authRouter.get('/api/validateToken', (req: Request, res: Response) => {
+    const tokenHeaderKey = process.env.TOKEN_HEADER_KEY!; // TODO: LOOK AT !
+    const jwtSecretKey = process.env.JWT_SECRET_KEY!; // TODO: LOOK AT !
+
     try {
-        const result = await userService.login(req.body.email);
-        console.log(`[userRouters.ts] get users result: ${JSON.stringify(result)}`)
-        res.json(result.rows);
+        const token = req.header(tokenHeaderKey)!;
+        const verified = jwt.verify(token, jwtSecretKey);
+
+        if (verified) {
+            return res.send('Successfully verified!');
+        } else {
+            return res.status(401).send('Access denied')
+        }
     } catch (error) {
-        console.log(`[userRouter.ts] Error executing query ${error}`);
-        res.status(500).json({ error: 'Internal Server Error'});
+        return res.status(401).send(`Access Denied: Error: ${error}`);
     }
 })
-*/
+
+authRouter.post('/api/generateToken', (req: Request, res: Response) => {
+    const { userId } = req.body.userId;
+    const jwtSecretKey = process.env.JWT_SECRET_KEY!;
+    const data = {
+        time: new Date(),
+        userId
+    };
+
+    const token = jwt.sign(data, jwtSecretKey);
+    res.send(token);
+});
 
 export default authRouter;

@@ -10,37 +10,50 @@ import Container from '@mui/material/Container';
 // App Components
 import Dashboard from './components/dashboard/Dashboard';
 import Login from './components/login/Login';
+import Messages from './components/messages/Messages';
 import NavBar from './layout/NavBar';
 import Preferences from './components/preferences/Preferences';
 
 // Hooks
 import useAuthContext from './hooks/useAuthContext';
+import Directs from './components/messages/Directs';
+import Groups from './components/messages/Groups';
+import Contacts from './components/messages/Contacts';
+
+// Loaders
+// import { loader as contactsLoader }  from './components/messages/Messages';
 
 function App() {
   const navigate = useNavigate();
   const { token, userObj } = useAuthContext();
+  console.log(`[App.tsx] token: ${JSON.stringify(token)}`);
+
 
   useEffect(() => {
-    // console.log(`[App.tsx] user: ${JSON.stringify(user)}`);
     console.log(`[App.tsx] userObj: ${JSON.stringify(userObj)}`);
-    console.log(`[App.tsx] token: ${JSON.stringify(token)}`);
-    // if (!userObj && !token) {
     if (!userObj) {
-    // if (!token) {
       navigate('/login');
     }
-  }, [token, userObj, navigate]);
+    
+  }, [userObj]);
+  // }, [token, userObj, navigate]);
 
-  if (!token) return <Login />
+  // if (!userObj) return <Login />
 
   return (
       <Container id='appContainer' className='wrapper'>
-        <h1>Main Application</h1>
+        {/* <h1>Main Application</h1> */}
         {userObj ? <NavBar /> : <></>}
         <Routes>
           <Route path='/login' element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />            
           <Route path="/preferences" element={<Preferences />} />
+          <Route path="/messages" element={<Messages />}>
+              <Route path='directs' element={<Directs />}/>
+              <Route path='groups' element={<Groups />} />
+              <Route path='contacts' element={<Contacts />} />
+              {/* loader={contactsLoader}/> */}
+          </Route>
         </Routes>
       </Container>
   )

@@ -1,6 +1,5 @@
 import { createContext } from "react";
-import { User } from "../hooks/useUser";
-
+import { User } from '../interfaces/user.interface';
 /*
     I think I want to refactor the AuthContext so that all I need is a way to return the user
         What's the best way of determining if a user is logged in?

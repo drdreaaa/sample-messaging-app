@@ -5,7 +5,7 @@ import useLocalStorage from "./useLocalStorage";
 export interface User {
     id: string;
     name: string;
-    username: string;
+    email: string;
     authToken?: string;
 }
 
@@ -14,7 +14,7 @@ const useUser = () => {
     // get the function to setUser from the context
         // what does this mean
     // const { user, setUser } = useContext(AuthContext);
-    const { user } = useContext(AuthContext);
+    const { userObj } = useContext(AuthContext);
     const { setItem, removeItem } = useLocalStorage();
 
     const addUser = (user: User) => {
@@ -29,7 +29,7 @@ const useUser = () => {
     }
 
     // return { user, addUser, removeUser, setUser };
-    return { user, addUser, removeUser };
+    return { userObj, addUser, removeUser };
 }
 
 export default useUser;

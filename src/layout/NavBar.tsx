@@ -5,6 +5,11 @@ import { Link } from 'react-router-dom';
 import Container from '@mui/material/Container';
 // import Button from '@mui/material/Button';
 
+// Icons
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import ChatIcon from '@mui/icons-material/Chat';
+import SearchIcon from '@mui/icons-material/Search';
+
 // App Components
 import LogoutButton from './LogoutButton';
 import Box from '@mui/material/Box';
@@ -18,15 +23,29 @@ const NavBar: React.FC = () => {
                 display: 'flex',
                 gap: '10px'
             }}>
-                <>app logo</>
-                <Link to={'/dashboard'}>Dashboard</Link>
-                <Link to={'/preferences'}>Preferences</Link>
-                {/* <Link to={'/dashboard'}>Dashboard</Link> */}
-                <>search icon</>
-                <>profile icon</>
+                <Box>
+                    <ChatIcon />
+                </Box>
+
+                <Box id='navLinks' 
+                    sx={{ 
+                        display: 'flex',
+                        gap: '15px' 
+                    }}>
+                    <Link to={'/dashboard'}>Dashboard</Link>
+                    <Link to={'/messages'}>Messages</Link>
+                    <Link to={'/preferences'}>Preferences</Link>
+                    {/* <Link to={'/dashboard'}>Dashboard</Link> */}
+                </Box>
+
+                <Box>
+                    <LogoutButton />
+                    <SearchIcon />
+                    <AccountCircleIcon />
+                </Box>
+
                 {/* <Button onClick={e => handleLogout(e)}>Logout</Button> */}
                 {/* <Button onClick={handleLogout}>Logout</Button> */}
-                <LogoutButton />
             </Box>
         </Container>
     )

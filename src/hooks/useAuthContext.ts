@@ -28,17 +28,17 @@ const useAuthContext = () => {
         }
     }
 
-    const setUserObjInStorage = (newUserObj: User) => {
-        if (newUserObj) {
-            setItem('userObj', JSON.stringify(newUserObj));
-        } else {
-            removeItem('userObj');
-        }
-    }
+    // const setUserObjInStorage = (newUserObj: User) => {
+    //     if (newUserObj) {
+    //         setItem('userObj', JSON.stringify(newUserObj));
+    //     } else {
+    //         removeItem('userObj');
+    //     }
+    // }
 
-    const removeUserObjInStorage = () => {
-        removeItem('userObj');
-    }
+    // const removeUserObjInStorage = () => {
+    //     removeItem('userObj');
+    // }
 
     const setTokenInStorage = (newToken: string) => {
         if (newToken) {
@@ -49,7 +49,7 @@ const useAuthContext = () => {
     }
 
     // return {user, saveUser, setUserInStorage, token, saveToken, setTokenInStorage, userObj, saveUserObj, setUserObjInStorage, removeUserObjInStorage};
-    return {setUserInStorage, token, saveToken, setTokenInStorage, userObj, saveUserObj, setUserObjInStorage, removeUserObjInStorage};
+    return { token, saveToken, setTokenInStorage, userObj, saveUserObj, removeUserObj };
 }
 
 export default useAuthContext;
