@@ -7,39 +7,30 @@ import Box from '@mui/material/Box';
 
 // App Components
 import MessagesSidebar from './MessagesSidebar';
-import messagesService from '../../clientServices/messages.service';
-import useAuthContext from '../../hooks/useAuthContext';
+
+// Services
+import MessagesProvider from '../../contexts/MessagesProvider';
 
 const Messages: React.FC = () => {
-    const { userObj } = useAuthContext();
-    const [contacts, setContacts] = useState([]);
-    const [directs, setDirects] = useState([]);
-
-    useEffect(() => {
-        if (userObj) {
-            messagesService.getContacts(userObj?.id).then((res) => {
-                setContacts(res);
-            });
-
-        }
-    }, []);
 
     return (
-        <Container id='messagesContainer'
-            sx={{
-                display: 'flex',
-                flexDirection: 'row'
-            }}
-        >
-            <Box id='messagesSidebar'>
-                <MessagesSidebar />                
-            </Box>
+        // <MessagesProvider>
+            <Container id='messagesContainer'
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'row'
+                }}
+                >
+                <Box id='messagesSidebar'>
+                    <MessagesSidebar />                
+                </Box>
 
-            <Box id='messagesPanel'>
-                <h3>Messages</h3>
-                <Outlet />
-            </Box>
-        </Container>
+                <Box id='messagesPanel'>
+                    <h3>Messages</h3>
+                    <Outlet />
+                </Box>
+            </Container>
+        // </MessagesProvider>
     )
 }
 

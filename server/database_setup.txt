@@ -1,0 +1,38 @@
+1. create the database
+2. create a schema
+3. create a table
+
+
+
+CREATE TABLE public.users (
+	id serial8 NOT NULL,
+	user_id int8 NOT NULL,
+	email varchar NOT NULL,
+	handle varchar NOT NULL,
+	first_name varchar NOT NULL,
+	last_name varchar NOT NULL,
+	created_date timestamptz NOT NULL,
+	modified_date timestamptz NOT NULL,
+	"password" varchar NOT NULL
+);
+
+CREATE TABLE messaging.directs (
+	id serial8 NOT NULL,
+	user_id int8 NOT NULL,
+	friend_id int8 NOT NULL,
+	thread_id int8 NOT NULL
+);
+
+CREATE TABLE messaging.contacts (
+	user_id int8 NOT NULL,
+	friend_id int8 NOT NULL,
+);
+
+CREATE TABLE messaging.chat_line (
+	id serial8 NOT NULL,
+	thread_id int8 NOT NULL,
+	user_id int8 NOT NULL,
+	message_id int8 NOT NULL,
+	message_text varchar NOT NULL,
+	message_timestamp timestamptz NOT NULL
+);

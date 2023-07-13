@@ -1,34 +1,59 @@
 import useLocalStorage from "./useLocalStorage";
-import loginService from "../components/login/login.service";
+import loginService from "../clientServices/login.service";
 import useAuthContext from "./useAuthContext";
 
 
 const useAuth = () => {
-    // auth context should just deal with the user
-    // const { token, saveToken, setTokenInStorage, userObj, saveUserObj, setUserObjInStorage } = useAuthContext();
     const { saveUserObj, removeUserObj } = useAuthContext();
-    // local storage should just deal with local storage on browser
-    const { /* getItem,  removeItem, */ setItem, clear } = useLocalStorage();
+    const { setItem, clear } = useLocalStorage();
+
+    // const { fetchContacts } = useMessagesContext();
+
+    const register = async(email: string, password: string, first: string, last: string, handle?: string) => {
+        const response = await loginService.register(email, password, first, last, handle);
+        console.log(`[useAuth hook] register response: ${JSON.stringify(response)}`);
+        if (response.error) {
+            console.log('register failure');
+            return response.error;
+        } else {
+            console.log('register success');
+            const { userId, email, first, last, handle, token } = response;
+            setItem('token', token);
+            setItem('user_id', userId);
+            // TODO: add last and handle to state context and interface
+            saveUserObj({
+                id: response.user_id,
+                email,
+                name: first,
+            });   
+            return userId;
+        }
+    }
 
     const login = async (email: string, password: string) => {
         const response = await loginService.login(email, password);
         console.log(`[useAuth hook] login response: ${JSON.stringify(response)}`);
-        // if successful, 
-            // add user to state variable
-            // add token to storage
-        // return??? boolean??? 
         if (response) {
+            const { user_id, email, first_name, token } = response;
+
             console.log('login success');
-            // add token from response to storage
-            setItem('token', response.token);
-            setItem('user_id', '1');
+            // add token & user id from response to storage
+            setItem('token', token);
+            setItem('user_id', user_id);
             // add user to state context
             saveUserObj({
-                id: '1',
+                id: response.user_id,
                 email,
-                name: 'andie'
-            });
-            return true;
+                name: first_name
+            });            
+
+            // fetch contacts: need ids & names to populate contact tiles
+            // fetch dms: just need ids & metadata to populate dm tiles
+                // on tile click, fetch message thread
+            // fetch groups: need ids & metadata to populate group thread tiles
+                // on tile click, fetch message thread
+
+            return user_id;
         } else {
             console.log('login failure');
             return false;
@@ -36,41 +61,11 @@ const useAuth = () => {
     }
 
     const logout = () => {
-        // LOGOUT SHOULD SET STATE VARS TO NULL 
-
-        // && CLEAR STORAGE
         clear();
         removeUserObj();
-
-        /*
-        // THIS SHOULD BE JUST ONE CALL 
-        // console.log(`[LogoutButton.tsx] user: ${user}`);
-        console.log(`[LogoutButton.tsx] userObj: ${userObj}`);
-        console.log(`[LogoutButton.tsx] token: ${token}`);
-        // saveUser(null);
-        saveToken(null);
-        setUserInStorage('');
-        setTokenInStorage('');
-        removeUserObjInStorage(); 
-        */
     }
 
-    return { login, logout };
-
-    // useEffect(() => {
-    //     const user = getItem('user');
-    //     if (user) {
-    //         addUser(JSON.parse(user));
-    //     }
-    // }, []);
-
-    // const login = async (user: User) => {
-    //     const response = await loginService.login(user.email, '');
-    //     console.log(`[useAuth.ts] response: ${JSON.stringify(response)}`);
-    //     addUser(user);
-    //     setItem('token', response.token);
-    // }
-
+    return { login, logout, register };
 }
 
 export default useAuth;

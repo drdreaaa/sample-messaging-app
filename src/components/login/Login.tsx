@@ -4,13 +4,15 @@ import React, { useEffect, useState } from 'react';
 import useAuth from '../../hooks/useAuth';
 import useLocalStorage from '../../hooks/useLocalStorage';
 
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import useMessagesContext from '../../hooks/useMessagesContext';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
     
     const { login } = useAuth();
     const { getItem } = useLocalStorage();
+    const { fetchContacts, fetchDirects } = useMessagesContext();
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -46,7 +48,9 @@ const Login: React.FC = () => {
         const response = await login(email.trim(), password.trim());
         console.log(`[Login.tsx] login response: ${response}`);
         if (response) {
-            navigate('/dashboard');
+            fetchContacts(response);
+            fetchDirects(response);
+            navigate('/messages');
         } else {
             alert('login failure, please check credentials and try again');
         }
@@ -113,6 +117,7 @@ const Login: React.FC = () => {
                 <button type="submit" onClick={e => handleLogin(e)}>Login</button>
                 </div>
             </form>
+            <div>Don't have an account? Register <Link to={'/register'}>here</Link></div>
         </div>
     )
 }

@@ -2,55 +2,35 @@ import Container from '@mui/material/Container';
 import React from 'react';
 import MessageCard from './MessageCard';
 import Box from '@mui/material/Box';
-import { Grid } from '@mui/material';
-
-const data = [
-    {
-        id: '1',
-        name: 'name1',
-        lastMessage: 'good night! ttyl <3',
-        lastMessageTime: 'July 8, 12:48 pm',
-    },
-    {
-        id: '2',
-        name: 'name2',
-        lastMessage: 'good night! ttyl <3',
-        lastMessageTime: 'July 8, 12:48 pm',
-    },
-    {
-        id: '3',
-        name: 'name3',
-        lastMessage: 'good night! ttyl <3',
-        lastMessageTime: 'July 8, 12:48 pm',
-    },
-    {
-        id: '4',
-        name: 'name4',
-        lastMessage: 'good night! ttyl <3',
-        lastMessageTime: 'July 8, 12:48 pm',
-    },
-    {
-        id: '5',
-        name: 'name5',
-        lastMessage: 'good night! ttyl <3',
-        lastMessageTime: 'July 8, 12:48 pm',
-    },
-    {
-        id: '6',
-        name: 'name6',
-        lastMessage: 'good night! ttyl <3',
-        lastMessageTime: 'July 8, 12:48 pm',
-    },
-]
+import useMessagesContext from '../../hooks/useMessagesContext';
+import { useNavigate } from 'react-router-dom';
 
 const Directs: React.FC = () => {
+    const navigate = useNavigate();
+    const { directs } = useMessagesContext();
+
+    const handleThreadSelect = (threadId: number) => {
+        console.log(`[Directs.tsx] selected thread: ${threadId}`);
+        navigate(`/messages/threads/${threadId}`);
+    }
 
     return (
         <Container>
             <h4>Direct Messages</h4>
             <Box sx={{ display: 'flex', flexDirection: 'row', gap: '5px', maxWidth: '550px' }}>
-                {data.map((item) => (
-                    <MessageCard key={item.id} name={item.name} lastMessage={item.lastMessage} lastTime={item.lastMessageTime}/>
+                {/* {directs.map((item) => (
+                    <MessageCard key={item.threadId} 
+                        threadId={item.threadId}
+                        name={item.threadId.toString()} 
+                        lastMessage={item.lastMessage} 
+                        lastTime={item.lastMessageTime}
+                        onSelectThread={handleThreadSelect}
+                    />
+                ))} */}
+                {directs?.map((dm) => (
+                    <MessageCard key={dm.id} 
+                        dm={dm}
+                        onSelectThread={handleThreadSelect} />
                 ))}
             </Box>
         </Container>

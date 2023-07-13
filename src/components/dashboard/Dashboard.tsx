@@ -1,13 +1,15 @@
 import React, { useEffect } from 'react';
 import useAuthContext from '../../hooks/useAuthContext';
+import useMessagesContext from '../../hooks/useMessagesContext';
 
 const Dashboard: React.FC = () => {
-    const { token, userObj } = useAuthContext();
+    const { userObj } = useAuthContext();
+    const { fetchContacts } = useMessagesContext();
 
-    useEffect(() => {
-        console.log(`token (in Dashboard)? \t ${token}`);
-        console.log(`userObj: (in Dashboard)? \t ${JSON.stringify(userObj)}`);
-    }, [token, userObj]);
+    // useEffect(() => {
+    //     console.log(`[Dashboard.tsx] FETCH CONTACTS`);
+    //     fetchContacts(parseInt(userObj!.id))
+    // }, [userObj]);
     
     return (
         <>

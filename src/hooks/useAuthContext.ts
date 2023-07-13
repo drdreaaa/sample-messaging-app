@@ -5,14 +5,8 @@ import { User } from "../interfaces/user.interface";
 import useAuth from "./useAuth";
 
 const useAuthContext = () => {
-    // const {user, saveUser, token, saveToken, saveUserObj, removeUserObj, userObj} = useContext(AuthContext);
     const {token, saveToken, saveUserObj, removeUserObj, userObj} = useContext(AuthContext);
 
-    // LOGOUT SHOULD SET STATE VARS TO NULL && CLEAR STORAGE
-    // const {login, logout} = useAuth();
-
-
-    // save user/token; remove user/token
     const {getItem, setItem, removeItem} = useLocalStorage();
     
 
@@ -20,26 +14,7 @@ const useAuthContext = () => {
         console.log(`[useAuthContext.ts] userObj or token is undefined`);
     }
 
-    const setUserInStorage = (newUser: string) => {
-        if (newUser) {
-            setItem('user', newUser);
-        } else {
-            removeItem('user');
-        }
-    }
-
-    // const setUserObjInStorage = (newUserObj: User) => {
-    //     if (newUserObj) {
-    //         setItem('userObj', JSON.stringify(newUserObj));
-    //     } else {
-    //         removeItem('userObj');
-    //     }
-    // }
-
-    // const removeUserObjInStorage = () => {
-    //     removeItem('userObj');
-    // }
-
+    
     const setTokenInStorage = (newToken: string) => {
         if (newToken) {
             setItem('token', newToken);
@@ -47,9 +22,38 @@ const useAuthContext = () => {
             removeItem('token');
         }
     }
-
-    // return {user, saveUser, setUserInStorage, token, saveToken, setTokenInStorage, userObj, saveUserObj, setUserObjInStorage, removeUserObjInStorage};
+    
     return { token, saveToken, setTokenInStorage, userObj, saveUserObj, removeUserObj };
 }
 
 export default useAuthContext;
+
+/*
+CRUFT
+// return {user, saveUser, setUserInStorage, token, saveToken, setTokenInStorage, userObj, saveUserObj, setUserObjInStorage, removeUserObjInStorage};
+
+
+const setUserInStorage = (newUser: string) => {
+    if (newUser) {
+        setItem('user', newUser);
+    } else {
+        removeItem('user');
+    }
+}
+
+// const setUserObjInStorage = (newUserObj: User) => {
+//     if (newUserObj) {
+//         setItem('userObj', JSON.stringify(newUserObj));
+//     } else {
+//         removeItem('userObj');
+//     }
+// }
+
+// const removeUserObjInStorage = () => {
+//     removeItem('userObj');
+// }
+\
+
+
+
+*/

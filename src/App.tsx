@@ -19,6 +19,11 @@ import useAuthContext from './hooks/useAuthContext';
 import Directs from './components/messages/Directs';
 import Groups from './components/messages/Groups';
 import Contacts from './components/messages/Contacts';
+import MessagesDashboard from './components/messages/MessagesDashboard';
+import MessagesProvider from './contexts/MessagesProvider';
+import Thread from './components/messages/Thread';
+import Register from './components/login/Register';
+import Contact from './components/messages/Contact';
 
 // Loaders
 // import { loader as contactsLoader }  from './components/messages/Messages';
@@ -26,11 +31,11 @@ import Contacts from './components/messages/Contacts';
 function App() {
   const navigate = useNavigate();
   const { token, userObj } = useAuthContext();
-  console.log(`[App.tsx] token: ${JSON.stringify(token)}`);
+  // console.log(`[App.tsx] token: ${JSON.stringify(token)}`);
 
 
   useEffect(() => {
-    console.log(`[App.tsx] userObj: ${JSON.stringify(userObj)}`);
+    // console.log(`[App.tsx] userObj: ${JSON.stringify(userObj)}`);
     if (!userObj) {
       navigate('/login');
     }
@@ -41,21 +46,28 @@ function App() {
   // if (!userObj) return <Login />
 
   return (
+    <MessagesProvider>
+
       <Container id='appContainer' className='wrapper'>
         {/* <h1>Main Application</h1> */}
         {userObj ? <NavBar /> : <></>}
         <Routes>
           <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
           <Route path="/dashboard" element={<Dashboard />} />            
           <Route path="/preferences" element={<Preferences />} />
           <Route path="/messages" element={<Messages />}>
+              <Route index element={<MessagesDashboard />} />
               <Route path='directs' element={<Directs />}/>
               <Route path='groups' element={<Groups />} />
               <Route path='contacts' element={<Contacts />} />
+              <Route path='threads/:id' element={<Thread />} />
+              <Route path='contacts/:id' element={<Contact />} />
               {/* loader={contactsLoader}/> */}
           </Route>
         </Routes>
       </Container>
+    </MessagesProvider>
   )
 }
 

@@ -1,20 +1,4 @@
-// import db from '../configs/db';
 import authDb from '../postgres/db.services/authService.db';
-
-
-/* 
-userRouter.post('/login', async(req: Request, res: Response) => {
-    try {
-        // const result = await userService.login(email, password);
-        const result = await userService.login(req.body.email);
-        console.log(`[userRouters.ts] get users result: ${JSON.stringify(result)}`)
-        res.json(result.rows);
-    } catch (err) {
-        console.log(`[userRouter.ts] Error executing query ${err}`);
-        res.status(500).json({ error: 'Internal Server Error'});
-    }
-});
-*/
 
 const authService = {
     login: async (email: string, password: string) => {
@@ -22,7 +6,7 @@ const authService = {
             const result = await authDb.login(email, password);
             console.log(`[AUTHSERVICE] login result: ${JSON.stringify(result)}`);
             return result.rows.length 
-                ? {...result.rows, token: 'test123'}
+                ? {...result.rows[0], token: 'test123'}
                 : null;
         } catch (error) {
             console.log(`[AUTHSERVICE] Internal server error. Error executing query. \n ${error}`);
@@ -36,7 +20,7 @@ const authService = {
         }
         return `Successfully logged out`;
     },
-    register: async (email: string, password: string) => {
+    register: async (email: string, password: string, first: string, last: string, handle: string) => {
         try {
             // check if email exists
             const exists = await authDb.checkEmail(email);
@@ -45,11 +29,15 @@ const authService = {
                 return { error: 'User exists' }
             }
 
-            const result = await authDb.register(email, password);
+            const result = await authDb.register(email, password, first, last, handle);
             console.log(`[AUTHSERVICE] register result: ${JSON.stringify(result.rows)}`);
+            
 
             return result.rows 
-                ? { token: 'test123', id: '1' } 
+                ? { 
+                    ...result.rows[0],
+                    token: 'test123', 
+                } 
                 : null;
         } catch (error) {
             console.log(`[AUTHSERVICE] Internal server error. Error executing query. \n ${error}`);

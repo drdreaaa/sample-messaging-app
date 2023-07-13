@@ -1,4 +1,5 @@
 import db from '../db.config';
+import msg_db from '../messaging_db.config';
 
 const authServiceDb = {
     getUsers: async () => {
@@ -18,7 +19,7 @@ const authServiceDb = {
         // if it doesn't, it's a login failure
     },
     checkEmail: async(email: string) => {
-        const result = await db.query(`
+        const result = await msg_db.query(`
             SELECT email 
             FROM users
             WHERE email = '${email}'
@@ -29,16 +30,24 @@ const authServiceDb = {
 
         return result;
     },
-    register: async (email: string, password: string) => {
-        // encrypt password 
-        // THEN save into db
-        // https://x-team.com/blog/storing-secure-passwords-with-postgresql/
 
-        return await db.query(`
+
+
+
+
+
+
+
+
+
+    // MESSAGING DB
+    register: async (email: string, password: string, first: string, last: string, handle: string) => {
+        return await msg_db.query(`
             INSERT INTO users 
-                (email, password, first, last) 
+                (email, password, first_name, last_name, handle, created_date, modified_date) 
             VALUES
-                ('${email}', '${password}', '', '')
+                ('${email}', '${password}', '${first}', '${last}', '${handle}', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+            RETURNING user_id, first_name, last_name
         `);
     }
 }

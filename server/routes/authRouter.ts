@@ -27,8 +27,8 @@ authRouter.post('/api/logout', async (req: Request, res: Response) => {
 });
 
 authRouter.post('/api/register', async (req: Request, res: Response) => {
-    const { email, password } = req.body;
-    const response = await authService.register(email, password);
+    const { email, password, first, last, handle } = req.body;
+    const response = await authService.register(email, password, first, last, handle);
     console.log(`[authRouter] response from service] ${JSON.stringify(response)}`);
     if (response) {
         res.send(response);
